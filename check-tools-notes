@@ -1,0 +1,40 @@
+
+ version 1.2-full
+# check tool
+x () {
+:
+}
+#
+for i in $(cat ./accounts.cfg); do
+    "$i"
+    echo "$i"
+    s3ls | awk '{print $3}' | grep ^. | grep -v ':|^$' > s3-bucket-names.$i
+
+    MyOwnAWSaccount
+    for j in $(cat ./s3-bucket-names.$i); do
+      Bcount=$(s3deep $j 2> /dev/null | grep '^2017' | wc -l)
+      [ $Bcount -gt 0 ] &&  { echo Checking Bucket [ $i:$j ] Violations [ $Bcount ] ; } || { echo Checking Bucket [ $i:$j ] Violations [ None Found ] ; }
+    done
+done
+#
+
+
+
+# version 1.2-brief
+# check tool
+x () {
+ :
+ }
+#
+for i in $(cat ./accounts.cfg); do
+    "$i"
+    echo "$i"
+    s3ls | awk '{print $3}' | grep ^. | grep -v ':|^$' > s3-bucket-names.$i
+
+    MyOwnAWSaccount
+    for j in $(cat ./s3-bucket-names.$i); do
+      Bcount=$(s3deep $j 2> /dev/null | grep '^2017' | wc -l)
+      [ $Bcount -gt 0 ] &&  { echo Checking Bucket [ $i:$j ] Violations [ $Bcount ] ; }
+    done
+done
+#
